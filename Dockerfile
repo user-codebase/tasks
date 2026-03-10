@@ -1,5 +1,5 @@
 # Build stage
-FROM openjdk:21 AS build
+FROM eclipse-temurin:21-jdk AS build
 
 # Install findutils
 RUN apt-get update && apt-get install -y findutils && rm -rf /var/lib/apt/lists/*
@@ -16,7 +16,7 @@ RUN chmod +x ./gradlew
 RUN ./gradlew build -x test
 
 # Run stage
-FROM openjdk:21
+FROM eclipse-temurin:21-jdk
 
 VOLUME /tmp
 COPY --from=build /app/build/libs/*.jar app.jar
