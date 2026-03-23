@@ -46,7 +46,14 @@ public class TrelloController {
 //    }
     @GetMapping("boards")
     public ResponseEntity<List<TrelloBoardDto>> getTrelloBoards() {
-        return ResponseEntity.ok(trelloClient.getTrelloBoards());
+        List<TrelloBoardDto> filteredBoards = trelloClient.getTrelloBoards()
+                .stream()
+                .filter(board -> board.getId() != null)
+                .filter(board -> board.getName() != null)
+                .filter(board -> board.getName().contains("Kodilla"))
+                .toList();
+
+        return ResponseEntity.ok(filteredBoards);
     }
 
 
