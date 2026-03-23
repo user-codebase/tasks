@@ -93,6 +93,7 @@ class TrelloClientTest {
         when(trelloConfig.getTrelloApiEndpoint()).thenReturn("http://test.com");
         when(trelloConfig.getTrelloAppKey()).thenReturn("test");
         when(trelloConfig.getTrelloToken()).thenReturn("test");
+        when(trelloConfig.getTrelloUser()).thenReturn("test");
 
         when(restTemplate.getForObject(any(), eq(TrelloBoardDto[].class)))
                 .thenReturn(null);
@@ -102,7 +103,8 @@ class TrelloClientTest {
 
         // Then
         assertNotNull(result);
-        assertEquals(0, result.size());
+//        assertEquals(0, result.size());
+        assertTrue(result.isEmpty());
     }
 
 }
