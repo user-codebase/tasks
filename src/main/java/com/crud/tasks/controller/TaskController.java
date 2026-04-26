@@ -17,7 +17,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/tasks")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "https://user-codebase.github.io")
+//@CrossOrigin(origins = "https://user-codebase.github.io")
+@CrossOrigin(origins = "*")
 public class TaskController {
 
     private final DbService service;
@@ -50,10 +51,18 @@ public class TaskController {
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> createTask(@RequestBody TaskDto taskDto) {
+//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<Void> createTask(@RequestBody TaskDto taskDto) {
+//        Task task = taskMapper.mapToTask(taskDto);
+//        service.saveTask(task);
+//        return ResponseEntity.ok().build();
+//    }
+
+    @PostMapping
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto) {
+        System.out.println(">>> POST TASK HIT");
         Task task = taskMapper.mapToTask(taskDto);
-        service.saveTask(task);
-        return ResponseEntity.ok().build();
+        Task savedTask = service.saveTask(task);
+        return ResponseEntity.ok(taskMapper.mapToTaskDto(savedTask));
     }
 }
