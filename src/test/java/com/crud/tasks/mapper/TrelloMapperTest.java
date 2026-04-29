@@ -9,12 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TrelloMapperTest {
 
+    private final TrelloMapper mapper = new TrelloMapper();
+
     @Test
     void shouldMapToBoards() {
         // given
         List<TrelloListDto> lists = List.of(new TrelloListDto("1", "List 1", false));
         List<TrelloBoardDto> boardDtos = List.of(new TrelloBoardDto("1", "Board 1", lists));
-        TrelloMapper mapper = new TrelloMapper();
 
         // when
         List<TrelloBoard> result = mapper.mapToBoards(boardDtos);
@@ -31,7 +32,6 @@ class TrelloMapperTest {
         // given
         List<TrelloList> lists = List.of(new TrelloList("1", "List 1", false));
         List<TrelloBoard> boards = List.of(new TrelloBoard("1", "Board 1", lists));
-        TrelloMapper mapper = new TrelloMapper();
 
         // when
         List<TrelloBoardDto> result = mapper.mapToBoardsDto(boards);
@@ -46,7 +46,6 @@ class TrelloMapperTest {
     void shouldMapToCard() {
         // given
         TrelloCardDto dto = new TrelloCardDto("name", "desc", "top", "123");
-        TrelloMapper mapper = new TrelloMapper();
 
         // when
         TrelloCard card = mapper.mapToCard(dto);
@@ -62,7 +61,6 @@ class TrelloMapperTest {
     void shouldMapToCardDto() {
         // given
         TrelloCard card = new TrelloCard("name", "desc", "top", "123");
-        TrelloMapper mapper = new TrelloMapper();
 
         // when
         TrelloCardDto dto = mapper.mapToCardDto(card);
@@ -70,5 +68,31 @@ class TrelloMapperTest {
         // then
         assertEquals("name", dto.getName());
         assertEquals("desc", dto.getDescription());
+        assertEquals("top", dto.getPos());
+        assertEquals("123", dto.getListId());
+    }
+
+    @Test
+    void shouldHandleEmptyListForMapToList() {
+        // given
+        List<TrelloListDto> emptyList = List.of();
+
+        // when
+        List<TrelloList> result = mapper.mapToList(emptyList);
+
+        // then
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void shouldHandleEmptyBoardListForMapToBoards() {
+        // given
+        List<TrelloBoardDto> emptyList = List.of();
+
+        // when
+        List<TrelloBoard> result = mapper.mapToBoards(emptyList);
+
+        // then
+        assertTrue(result.isEmpty());
     }
 }
