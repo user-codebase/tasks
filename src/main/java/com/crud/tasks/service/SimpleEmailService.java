@@ -2,6 +2,7 @@ package com.crud.tasks.service;
 
 import com.crud.tasks.config.AdminConfig;
 import com.crud.tasks.domain.Mail;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;

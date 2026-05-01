@@ -1,6 +1,8 @@
 package com.crud.tasks.service;
 
+import com.crud.tasks.config.AdminConfig;
 import com.crud.tasks.domain.Mail;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -11,8 +13,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SimpleEmailServiceTest {
@@ -22,6 +23,14 @@ class SimpleEmailServiceTest {
 
     @Mock
     private JavaMailSender javaMailSender;
+
+    @Mock
+    private AdminConfig adminConfig;
+
+    @BeforeEach
+    void setup() {
+        when(adminConfig.getAdminMail()).thenReturn("admin@test.com");
+    }
 
     @Test
     public void shouldSendEmail() {
@@ -50,6 +59,7 @@ class SimpleEmailServiceTest {
         assertEquals("Test", sentMessage.getSubject());
         assertEquals("Test Message", sentMessage.getText());
         assertNull(sentMessage.getCc());
+        assertEquals("admin@test.com", sentMessage.getFrom());
     }
 
     @Test
@@ -76,6 +86,7 @@ class SimpleEmailServiceTest {
         assertEquals("Test", sentMessage.getSubject());
         assertEquals("Test Message", sentMessage.getText());
         assertEquals("test2@test.com", sentMessage.getCc()[0]);
+        assertEquals("admin@test.com", sentMessage.getFrom());
     }
 
 }
