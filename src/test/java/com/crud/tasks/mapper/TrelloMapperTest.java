@@ -95,4 +95,36 @@ class TrelloMapperTest {
         // then
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    void shouldMapToList() {
+        // given
+        TrelloListDto dto = new TrelloListDto("1", "Test List", true);
+        List<TrelloListDto> dtos = List.of(dto);
+
+        // when
+        List<TrelloList> result = mapper.mapToList(dtos);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals("1", result.get(0).getId());
+        assertEquals("Test List", result.get(0).getName());
+        assertTrue(result.get(0).isClosed());
+    }
+
+    @Test
+    void shouldMapToListDto() {
+        // given
+        TrelloList list = new TrelloList("1", "Test List", true);
+        List<TrelloList> lists = List.of(list);
+
+        // when
+        List<TrelloListDto> result = mapper.mapToListDto(lists);
+
+        // then
+        assertEquals(1, result.size());
+        assertEquals("1", result.get(0).getId());
+        assertEquals("Test List", result.get(0).getName());
+        assertTrue(result.get(0).isClosed());
+    }
 }

@@ -52,7 +52,7 @@ class DbServiceTest {
     }
 
     @Test
-    void shouldGetTaskById() {
+    void shouldGetTaskById() throws TaskNotFoundException {
         // Given
         Task task = new Task(1L, "test", "desc");
         when(repository.findById(1L)).thenReturn(Optional.of(task));
@@ -78,17 +78,6 @@ class DbServiceTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenTaskNotFound() {
-        // Given
-        when(repository.findById(1L)).thenReturn(Optional.empty());
-
-        // When & Then
-        assertThrows(TaskNotFoundException.class, () -> {
-            dbService.getTask(1L);
-        });
-    }
-
-    @Test
     void shouldDeleteTask() {
         // When
         dbService.deleteTask(1L);
@@ -106,25 +95,11 @@ class DbServiceTest {
         verify(repository).save(task);
     }
 
+
     @Test
-    void shouldThrowTaskNotFoundException() {
-        // Given
+    void shouldThrowTaskNotFoundExceptionWhenTaskDoesNotExist() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        // When & Then
         assertThrows(TaskNotFoundException.class, () -> dbService.getTask(1L));
-    }
-
-    @Test
-    void shouldReturnTask() throws TaskNotFoundException {
-        // Given
-        Task task = new Task(1L, "test", "desc");
-        when(repository.findById(1L)).thenReturn(Optional.of(task));
-
-        // When
-        Task result = dbService.getTask(1L);
-
-        // Then
-        assertEquals(1L, result.getId());
     }
 }

@@ -27,7 +27,6 @@ public class TrelloService {
 
     public CreatedTrelloCardDto createTrelloCard(final TrelloCardDto trelloCardDto) {
         CreatedTrelloCardDto newCard = trelloClient.createNewCard(trelloCardDto);
-        System.out.println("ADMIN MAIL = " + adminConfig.getAdminMail());
         ofNullable(newCard).ifPresent(card -> emailService.send(
                 new Mail(
                     adminConfig.getAdminMail(),

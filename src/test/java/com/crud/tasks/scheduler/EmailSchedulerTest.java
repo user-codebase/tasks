@@ -46,4 +46,24 @@ class EmailSchedulerTest {
         assertEquals("Tasks: Once a day email", sentMail.getSubject());
         assertTrue(sentMail.getMessage().contains("1 task"));
     }
+
+    @Test
+    void shouldSendEmailWithMultipleTasks() {
+        // Given
+        when(taskRepository.count()).thenReturn(5L);
+        when(adminConfig.getAdminMail()).thenReturn("test@mail.com");
+
+        // When
+        emailScheduler.sendInformationEmail();
+
+        // Then
+        ArgumentCaptor<Mail> mailCaptor = ArgumentCaptor.forClass(Mail.class);
+        verify(simpleEmailService).send(mailCaptor.capture());
+
+        Mail sentMail = mailCaptor.getValue();
+
+        assertEquals("test@mail.com", sentMail.getMailTo());
+        assertEquals("Tasks: Once a day email", sentMail.getSubject());
+        assertTrue(sentMail.getMessage().contains("5 tasks"));
+    }
 }
