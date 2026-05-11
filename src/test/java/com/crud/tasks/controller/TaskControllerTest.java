@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -69,9 +70,12 @@ class TaskControllerTest {
 
     @Test
     void shouldDeleteTask() throws Exception {
-        // When & Then
+        // When
         mockMvc.perform(delete("/v1/tasks/1"))
                 .andExpect(status().isOk());
+
+        // Then
+        verify(service).deleteTask(1L);
     }
 
     @Test
@@ -118,5 +122,16 @@ class TaskControllerTest {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.title").value("Test"))
                 .andExpect(jsonPath("$.content").value("Test desc"));
+    }
+
+    @Test
+    void shouldReturnBadRequestWhenTaskNotFound() throws Exception {
+        // Given
+        when(service.getTask(1L)).thenThrow(new TaskNotFoundException());
+
+        // When & Then
+        mockMvc.perform(get("/v1/tasks/1"))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Task with given id doesn't exist"));
     }
 }
